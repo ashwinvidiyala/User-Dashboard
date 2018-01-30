@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>User Homepage</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'user_app/stylesheet.css' %}" media="screen" title="no title"  charset="utf-8">
+  </head>
+  <body>
+    <div> <!-- Header -->
+      <h3>Test App</h3>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/users/show/{{request.session.id}}">Profile</a>
+      {% if request.session.id == id %}
+      <a href="/users/edit/{{request.session.id}}">Edit Profile</a>
+      {% endif %}
+      {% if request.session.login_status == 1 %}
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a>
+      {% endif%}
+    </div>
+
+    <div>
+      <h3>{{first_name}} {{last_name}}</h3>
+      <p>Registered at: {{created_at}}</p>
+      <p>User ID: {{id}}</p>
+      <p>Email Address: {{email}}</p>
+      <p>Description: {{description}}</p>
+    </div>
+
+    {% if request.session.id != id %}
+    <div>
+      <h2>Leave a message for {{first_name}}</h2>
+      <form action="/message/{{id}}" id='message' method="post">
+        {% csrf_token %}
+        <textarea name="message" rows="8" cols="80" form='message'></textarea>
+        <input type="submit" name="submit" value="Post Message">
+      </form>
+    </div>
+    {% endif %}
+
+    <div>
+      {% for message in messages %}
+      <p class='underline'><a href="/users/show/{{message.message_author.id}}">{{message.message_author.first_name}} {{message.message_author.last_name}}</a> wrote:</p>
+      <h3 class='red'>{{message.message}}</h3>
+    </div>
+
+      <div>
+          <form action="/comment/{{message.id}}" id='comment' method="post">
+            {% csrf_token %}
+            <textarea name="user_comment" rows="4" cols="80" form='comment'></textarea>
+            <input type="submit" name="submit" value="Post Comment">
+          </form>
+          {% for comment in comments %}
+            <p class='underline'><a href="/users/show/{{comment.comment_author.id}}">{{comment.comment_author.first_name}} {{comment.comment_author.last_name}} wrote:</a></p>
+            <p class='blue'>{{comment.comment}}</p>
+          {% endfor %}
+      </div>
+      {% endfor %}
+  </body>
+</html>

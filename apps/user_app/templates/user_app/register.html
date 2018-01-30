@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Register</title>
+  </head>
+  <body>
+    <div> <!-- Header -->
+      <h3>Test App</h3>
+      <a href="/index">Home</a>
+      {% if request.session.login_status == 1 %}
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a>
+      {% endif%}
+    </div>
+
+    <div>
+      {% if request.session.user_level == 1 %}
+        <h2>Add A New User</h2>
+        <a href="/dashboard">Return To Dashboard</a>
+      {% else %}
+        <h2>Register</h2>
+      {% endif %}
+      <form action="/users/register" method="post">
+        {% csrf_token%}
+        Email Address:
+        <br><input type="text" name="email" required><br><br>
+        First Name:
+        <br><input type="text" name="first_name" required><br><br>
+        Last Name:
+        <br><input type="text" name="last_name" required><br><br>
+        Password:
+        <br><input type="password" name="password" required><br><br>
+        Password Confirmation:
+        <br><input type="password" name="password_confirmation" required><br><br>
+        {% if request.session.user_level == 1 %}
+          <input type="submit" name="submit" value="Create"><br><br>
+        {% else %}
+          <input type="submit" name="submit" value="Register"><br><br>
+        {% endif %}
+      </form>
+        {% if request.session.user_level == 2 %}
+        <a href="/login">Already have an account? Login</a>
+        {% endif %}
+    </div>
+
+    <div> <!-- Shows validation errors -->
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </body>
+</html>

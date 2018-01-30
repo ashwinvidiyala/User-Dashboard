@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div> <!-- Header -->
+      <h3>Test App</h3>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/users/show/{{request.session.id}}">Profile</a>
+      {% if request.session.login_status == 1 %}
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a>
+      {% endif%}
+    </div>
+
+    {% for user in user_data %}
+    <div> <!-- Edit Information -->
+      <h2>Edit User #{{user.id}}</h2>
+      <h3>Edit Information</h3>
+      <form action="/users/edit_users" method="post">
+        {% csrf_token %}
+        Email Address:
+        <br><input type="text" name="email" placeholder='{{user.email}}'><br><br>
+        First Name:
+        <br><input type="text" name="first_name" placeholder='{{user.first_name}}'><br><br>
+        Last Name:
+        <br><input type="text" name="last_name" placeholder='{{user.last_name}}'><br><br>
+        {% if request.session.user_level == 1 %}
+        User Level:
+          <select name="user_level">
+            <option value="1">Admin</option>
+            <option value="2">Normal</option>
+          </select>
+        {% endif %}
+        <input type="hidden" name="id" value="{{user.id}}">
+        <input type="submit" name="submit" value="Save"><br><br>
+      </form>
+    </div>
+    <div> <!-- Change Password -->
+      <h3>Change Password</h3>
+      <form action="/users/edit_users" method="post">
+        {% csrf_token %}
+        Password:
+        <br><input type="password" name="password"><br><br>
+        Password Confirmation:
+        <br><input type="password" name="password_confirmation"><br><br>
+        <input type="hidden" name="id" value="{{user.id}}">
+        <input type="submit" name="submit" value="Update Password"><br><br>
+      </form>
+    </div>
+
+      {% if request.session.id == user.id %}
+      <div> <!-- Edit Description -->
+        <form action="/users/edit_users" method="post" id='description'>
+          {% csrf_token %}
+          <h2>Edit Description</h2>
+          <textarea name="description" form='description' rows="8" cols="80">Edit Description </textarea>
+          <input type="hidden" name="id" value="{{user.id}}">
+          <input type="submit" name="submit" value="Edit Description"><br><br>
+        </form>
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    <div> <!-- Shows validation errors -->
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </body>
+</html>
