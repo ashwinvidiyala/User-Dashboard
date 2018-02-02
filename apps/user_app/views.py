@@ -22,21 +22,15 @@ def users_new(request):
     return render(request, 'user_app/users_new.html')
 
 def profile(request, id):
-    user = User.objects.filter(id = id)
-    for user in user:
-        context = {
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'id': user.id,
-            'email': user.email,
-            'description': user.description,
-            'user_level': user.user_level,
-            'created_at': user.created_at,
-            'messages': user.messages_of_receiver.all(),
-        }
-        for message in user.messages_of_receiver.all():
-            context['message_id'] = message.id
-            context['comments'] = message.comments.all()
+    user = User.objects.get(id = id)
+    messages = user.messages_of_receiver.all()
+    context = {
+        'user': user,
+        'messages': messages,
+    }
+    for message in user.messages_of_receiver.all():
+        context['message_id'] = message.id
+        context['comments'] = message.comments.all()
 
     return render(request, 'user_app/profile.html', context)
 

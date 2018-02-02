@@ -22,17 +22,17 @@
     </div>
 
     <div>
-      <h3>{{first_name}} {{last_name}}</h3>
-      <p>Registered at: {{created_at}}</p>
-      <p>User ID: {{id}}</p>
-      <p>Email Address: {{email}}</p>
-      <p>Description: {{description}}</p>
+      <h3>{{user.first_name}} {{user.last_name}}</h3>
+      <p>Registered at: {{user.created_at}}</p>
+      <p>User ID: {{user.id}}</p>
+      <p>Email Address: {{user.email}}</p>
+      <p>Description: {{user.description}}</p>
     </div>
 
     {% if request.session.id != id %}
     <div>
-      <h2>Leave a message for {{first_name}}</h2>
-      <form action="/message/{{id}}" id='message' method="post">
+      <h2>Leave a message for {{user.first_name}}</h2>
+      <form action="/message/{{user.id}}" id='message' method="post">
         {% csrf_token %}
         <textarea name="message" rows="8" cols="80" form='message'></textarea>
         <input type="submit" name="submit" value="Post Message">
