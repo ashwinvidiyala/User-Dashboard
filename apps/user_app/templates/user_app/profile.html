@@ -45,7 +45,7 @@
       <p class='underline'><a href="/users/show/{{message.message_author.id}}">{{message.message_author.first_name}} {{message.message_author.last_name}}</a> wrote:</p>
       <h3 class='red'>{{message.message}}</h3>
     </div>
-
+<!--
       <div>
           <form action="/comment/{{message.id}}" id='comment' method="post">
             {% csrf_token %}
@@ -56,7 +56,7 @@
             <p class='underline'><a href="/users/show/{{comment.comment_author.id}}">{{comment.comment_author.first_name}} {{comment.comment_author.last_name}} wrote:</a></p>
             <p class='blue'>{{comment.comment}}</p>
           {% endfor %}
-      </div>
+      </div> -->
       {% endfor %}
   </body>
 </html>
